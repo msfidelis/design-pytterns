@@ -26,8 +26,8 @@ class Orcamento(object):
         self.__itens.append(item)
 
 ##
-# Representação de um Item do orçamento
-##        
+# Classe de representação de um Orçamento
+##
 class Item(object):
 
     def __init__(self, nome, valor):
