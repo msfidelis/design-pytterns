@@ -24,12 +24,15 @@ class Estado_de_um_orcamento(object):
     def finaliza(self, orcamento):
         pass
 ##
-# 
+# State: Em aprovação
 ##
 class Em_aprovacao(Estado_de_um_orcamento):
 
     def aplica_desconto_extra(self, orcamento):
-        orcamento.adiciona_desconto_extra(orcamento.valor * 0.02)
+        if orcamento.total_desconto > 0:
+            raise Exception("Desconto já aplicado")
+        else:
+            orcamento.adiciona_desconto_extra(orcamento.valor * 0.02)
 
     def aprova(self, orcamento):
         orcamento.estado_atual = Aprovado()
@@ -41,12 +44,16 @@ class Em_aprovacao(Estado_de_um_orcamento):
         raise Exception("Orçamentos em aprovação não podem ser finalizados")
 
 ##
-# 
+# State: Aprovado
 ##
 class Aprovado(Estado_de_um_orcamento):
 
     def aplica_desconto_extra(self, orcamento):
-         orcamento.adiciona_desconto_extra(orcamento.valor * 0.05)
+        
+        if orcamento.total_desconto > 0:
+            raise Exception("Desconto já aplicado")
+        else:
+            orcamento.adiciona_desconto_extra(orcamento.valor * 0.05)
 
     def aprova(self, orcamento):
         raise Exception("Orçamento já aprovado")
@@ -58,7 +65,7 @@ class Aprovado(Estado_de_um_orcamento):
        orcamento.estado_atual = Finalizado()
 
 ##
-# 
+# State: Reprovado
 ##
 class Reprovado(Estado_de_um_orcamento):
 
@@ -75,7 +82,7 @@ class Reprovado(Estado_de_um_orcamento):
        orcamento.estado_atual = Finalizado()
 
 ##
-# 
+# State: Finalizado
 ##
 class Finalizado(Estado_de_um_orcamento):
 
@@ -103,7 +110,8 @@ class Orcamento(object):
         self.__desconto_extra = 0
 
     ##
-    #
+    # Retorna o valor total do orçamento
+    # menos o valor de descontos existentes
     ##
     @property
     def valor(self):
@@ -113,14 +121,23 @@ class Orcamento(object):
 
         return total - self.__desconto_extra
     ##
-    #
+    # Retorna a quantidade de itens
+    # no Orçamento
     ##
     @property
     def total_itens(self):
         return len(self.__itens)
 
     ##
-    #
+    # Retorna o total de desconto existente
+    # no orçamento
+    ##
+    @property
+    def total_desconto(self):
+        return self.__desconto_extra;
+
+    ##
+    # Retorna todos os itens do orçamento
     ##
     def obter_itens(self):
         return tuple(self.__itens)
