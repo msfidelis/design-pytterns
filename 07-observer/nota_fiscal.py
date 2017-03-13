@@ -65,7 +65,7 @@ class Nota_fiscal(object):
 
 
 if __name__ == "__main__":
-	
+
 	from observadores import imprime, envia_por_email, salva_no_banco
 	from criador_de_nota_fiscal import Criador_de_nota_fiscal
 
@@ -86,7 +86,5 @@ if __name__ == "__main__":
 		itens=itens, 
 		observadores=observadores
 		);
-
-
 
 
